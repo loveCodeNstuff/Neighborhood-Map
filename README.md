@@ -32,3 +32,7 @@ Either use Staging Site Link or run on LocalHost instructions below
 * HTML
 * CSS
 * Gulp
+
+## Apis Used
+Google Maps
+Flicker
