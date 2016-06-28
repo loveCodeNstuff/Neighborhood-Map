@@ -35,4 +35,4 @@ Either use Staging Site Link or run on LocalHost instructions below
 
 ## Apis Used
 Google Maps  
-Flicker
+Flickr
