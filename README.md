@@ -34,5 +34,5 @@ Either use Staging Site Link or run on LocalHost instructions below
 * Gulp
 
 ## Apis Used
-Google Maps
+Google Maps  
 Flicker
