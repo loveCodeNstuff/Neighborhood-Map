@@ -25,6 +25,7 @@ Either use Staging Site Link or run on LocalHost instructions below
 ### Tools and Technology used
 
 * JavaScript
+* KnockoutJS
 * Node.js
 * Express
 * Jade
