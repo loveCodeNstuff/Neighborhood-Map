@@ -3,7 +3,8 @@ var express = require('express'),
     port = process.env.PORT || 3000;
 
 app.set('view engine', 'jade');
-app.use(express.static(__dirname + '/public'));
+app.set('views', 'src/views/');
+app.use(express.static('src/public/'));
 // app.locals.pretty = true;
 
 app.get('/', (req, res) => {

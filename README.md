@@ -4,9 +4,6 @@
 
 Neighborhood Map Project for my Udacity Front End Development Course
 
-## How to use Site
-This site has a list of places marked on google maps which can be filtered by name.  Also the list has a button on the top left side which marked by a 'X'.  This button will move the list out of your way and back onto screen if clicked while off screen.  Enjoy :-)
-
 ## How to run Site
 Either use Staging Site Link or run on LocalHost instructions below
 
@@ -31,7 +28,6 @@ I am using Gulp 4.0 alpha version here are instructions on installing it
 ### Tools and Technology used
 
 * JavaScript
-* KnockoutJS
 * Node.js
 * Express
 * Jade
@@ -39,7 +35,3 @@ I am using Gulp 4.0 alpha version here are instructions on installing it
 * HTML
 * CSS
 * Gulp
-
-## Apis Used
-Google Maps  
-Flickr

@@ -1,7 +1,7 @@
 /************************
        List
 ************************/
-#list{
+#list {
   position: absolute;
   left: calc(100vw - 300px);
   top: 2%;
@@ -13,27 +13,29 @@
   max-height: 95%;
   overflow: scroll;
 
-  ul{
+  ul {
     list-style-type: none;
     color: #adacac;
-    li{
+    li {
       color: navy;
     }
-    li:hover{
+    li:hover {
       color: red;
       cursor: pointer;
     }
   }
 
-  input{
+  input {
     border: 1px solid black;
+    margin: 0 20%;
+  }
+
+  .error {
+    color: red;
   }
 }
 
-#closeList{
-
-
-  // button{
+#closeList {
     position: absolute;
     left: calc(100vw - 320px);
     top: 2%;
@@ -45,10 +47,9 @@
     background-color: black;
     color: white;
     font-weight: 900;
-  // }
 }
 
-#closeList:hover{
+#closeList:hover {
   color: red;
   cursor: pointer;
 }

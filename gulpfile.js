@@ -1,84 +1,84 @@
-const gulp = require('gulp'),
-      path = require('path'),
+const GULP = require('gulp'),
+      PATH = require('path'),
       $ = require('gulp-load-plugins')();
 
 ////////////////////////////////////////////
-//             Configuration              //
+//             CONFIGuration              //
 ////////////////////////////////////////////
-const config = {
+const CONFIG = {
     styles: {
-        src: ['public/sass/style.scss'],
-        srcDir: 'public/sass/*.scss',
-        dest: 'public/css/',
-        prodDest: '../dist/public/css/'
+        src: ['src/public/sass/style.scss'],
+        srcDir: 'src/public/sass/*.scss',
+        dest: 'src/public/css/',
+        prodDest: 'dist/public/css/'
     },
     scripts: {
-        src: 'public/js/preBuild/**/*.js',
+        src: 'src/public/js/preBuild/**/*.js',
         bundle: 'custom.js',
-        dest: 'public/js/',
-        prodDest: '../dist/public/js/'
+        dest: 'src/public/js/',
+        prodDest: 'dist/public/js/'
     },
     jade:{
-      src: 'views/index.jade',
-      srcDir: 'views/**/*.jade',
-      dest: '../dist/views/html/'
+      src: 'src/views/index.jade',
+      srcDir: 'src/views/**/*.jade',
+      dest: 'dist/views/html/'
     },
     img:{
-      srcDir: ['public/img/*.jpg','public/img/*.png'],
-      dest: '../dist/public/img/'
+      srcDir: ['src/public/img/*.jpg','src/public/img/*.png'],
+      dest: 'dist/public/img/'
     },
     html:{
-      srcDir: 'views/html/*.html',
-      dest: '../dist/views/html/'
+      srcDir: 'src/views/html/*.html',
+      dest: 'dist/views/html/'
     }
 }
 
 ////////////////////////////////////////////
 //             Development                //
 ////////////////////////////////////////////
-gulp.task('dev:sass', ()=>{
-  return gulp
-    .src(config.styles.src)
+GULP.task('dev:sass', ()=>{
+  return GULP
+    .src(CONFIG.styles.src)
     .pipe($.sourcemaps.init())
     .pipe($.sass())
     .pipe($.autoprefixer({
       browsers: ['last 2 versions']
     }))
     .pipe($.sourcemaps.write())
-    .pipe(gulp.dest(config.styles.dest));
+    .pipe(GULP.dest(CONFIG.styles.dest));
 });
 
-gulp.task('dev:lint', ()=>{
-  return gulp
-    .src(config.scripts.src)
+GULP.task('dev:lint', ()=>{
+  return GULP
+    .src(CONFIG.scripts.src)
     .pipe($.cached('linting'))
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
 });
 
-gulp.task('dev:jadeLint', ()=>{
-  return gulp
-    .src(config.jade.srcDir)
+GULP.task('dev:jadeLint', ()=>{
+  return GULP
+    .src(CONFIG.jade.srcDir)
     .pipe($.pugLint());
 });
 
-gulp.task('dev:sassLint', ()=>{
-  return gulp.src(config.styles.srcDir)
+GULP.task('dev:sassLint', ()=>{
+  return GULP.src(CONFIG.styles.srcDir)
     .pipe($.scssLint());
 });
 
-gulp.task('dev:jsBabel', ()=>{
-  return gulp
-    .src(config.scripts.src)
+GULP.task('dev:jsBabel', ()=>{
+  return GULP
+    .src(CONFIG.scripts.src)
     .pipe($.babel({
 			   presets: ['es2015']
 		  }
     ))
-    .pipe(gulp.dest(config.scripts.dest))
+    .pipe(GULP.dest(CONFIG.scripts.dest))
 });
 
-gulp.task('dev',
-  gulp.parallel(
+GULP.task('dev',
+  GULP.parallel(
     'dev:sass',
     'dev:lint',
     'dev:jadeLint',
@@ -86,54 +86,54 @@ gulp.task('dev',
     // 'dev:jsBabel'
 ));
 
-gulp.task('dev:watch', gulp.series('dev', devWatch));
+GULP.task('dev:watch', GULP.series('dev', devWatch));
 
 function devWatch(){
-    gulp.watch(config.styles.srcDir, gulp.series('dev:sass'));
-    gulp.watch(config.scripts.src, gulp.series('dev:lint'));
-    // gulp.watch(config.scripts.src, gulp.series('dev:jsBabel'));
-    gulp.watch(config.jade.srcDir, gulp.series('dev:jadeLint'));
-    gulp.watch(config.styles.srcDir, gulp.series('dev:sassLint'));
+    GULP.watch(CONFIG.styles.srcDir, GULP.series('dev:sass'));
+    GULP.watch(CONFIG.scripts.src, GULP.series('dev:lint'));
+    // GULP.watch(CONFIG.scripts.src, GULP.series('dev:jsBabel'));
+    GULP.watch(CONFIG.jade.srcDir, GULP.series('dev:jadeLint'));
+    GULP.watch(CONFIG.styles.srcDir, GULP.series('dev:sassLint'));
 }
 
-gulp.task('default', gulp.series('dev:watch'));
+GULP.task('default', GULP.series('dev:watch'));
 
 ////////////////////////////////////////////
 //              Production                //
 ////////////////////////////////////////////
-gulp.task('prod:sass', ()=>{
-  return gulp
-    .src(config.styles.src)
+GULP.task('prod:sass', ()=>{
+  return GULP
+    .src(CONFIG.styles.src)
     .pipe($.sass())
     .pipe($.autoprefixer({
       browsers: ['last 2 versions']
     }))
     .pipe($.cleanCss())
-    .pipe(gulp.dest(config.styles.prodDest));
+    .pipe(GULP.dest(CONFIG.styles.prodDest));
 });
 
-gulp.task('prod:jsMini', ()=>{
-  return gulp
-    .src(config.scripts.src)
+GULP.task('prod:jsMini', ()=>{
+  return GULP
+    .src(CONFIG.scripts.src)
     .pipe($.babel({
 			   presets: ['es2015']
 		  }
     ))
-    .pipe($.concat(config.scripts.bundle))
+    .pipe($.concat(CONFIG.scripts.bundle))
     .pipe($.uglify())
-    .pipe(gulp.dest(config.scripts.prodDest))
+    .pipe(GULP.dest(CONFIG.scripts.prodDest))
 });
 
-gulp.task('prod:img', ()=>{
-  return gulp.src(config.img.srcDir)
+GULP.task('prod:img', ()=>{
+  return GULP.src(CONFIG.img.srcDir)
     .pipe($.imagemin({
       optimizationLevel: 7       //  0 thru 7 being the most abusive 3 is default
     }))
-    .pipe(gulp.dest(config.img.dest));
+    .pipe(GULP.dest(CONFIG.img.dest));
 });
 
-gulp.task('production',          // gulp tasks are not hoisted like functions remmeber that
-  gulp.parallel(
+GULP.task('production',          // GULP tasks are not hoisted like functions remmeber that
+  GULP.parallel(
     'prod:sass',
     'prod:jsMini',
     'prod:img'
@@ -148,19 +148,19 @@ gulp.task('production',          // gulp tasks are not hoisted like functions re
 /////////////////////////////////
 //    Jade to HTML Compiling   //
 /////////////////////////////////
-gulp.task('jade', ()=>{
-  return gulp.src(config.jade.src)
+GULP.task('jade', ()=>{
+  return GULP.src(CONFIG.jade.src)
       .pipe($.jade({
         pretty: true
       }))
-      .pipe(gulp.dest(config.jade.dest))
+      .pipe(GULP.dest(CONFIG.jade.dest))
 });
 
 ///////////////////////
 //    HTML5 Linting  //
 ///////////////////////
-gulp.task('dev:html', ()=>{
-    return gulp.src(config.html.scrDir)
+GULP.task('dev:html', ()=>{
+    return GULP.src(CONFIG.html.scrDir)
         .pipe($.html5Lint());
 });
 
@@ -170,13 +170,13 @@ gulp.task('dev:html', ()=>{
 const browserSync = require('browser-sync').create(),
       reload      = browserSync.reload;
 
-gulp.task('dev:serve', ()=>{
+GULP.task('dev:serve', ()=>{
 
     browserSync.init({
       server: {
-        baseDir: config.html.dest
+        baseDir: CONFIG.html.dest
       }
     });
 
-    gulp.watch(config.html.srcDir).on("change", reload);
+    GULP.watch(CONFIG.html.srcDir).on("change", reload);
 });

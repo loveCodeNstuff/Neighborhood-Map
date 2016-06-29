@@ -1,28 +1,28 @@
 /************************
        Map
 ************************/
-#map{
+#map {
   margin: 0;
   height: 100vh;
 }
 
-.pic{
+.pic {
   width:71px;
   height:70px;
   transition: 1s all ease;
 }
 
-.pic:hover{
+.pic:hover {
   transform: scale(2);
 }
 
-#apis{
+#apis {
   position: absolute;
   top: 28px;
   left: calc(100vw - 79px);
   transition: 1s all ease;
 
-  img{
+  img {
     width: 50px;
     height: 50px;
   }

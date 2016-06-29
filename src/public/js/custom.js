@@ -134,9 +134,9 @@ var ViewModel = function ViewModel() {
     // off for that item.  And if input is empty retun all items back to list.
     // Also hiding or showing mathing google maps makers
     for(var x = 0; x < locationLength; x++) {
-      var nameLowerCase = self.locationList()[x].name().toLowerCase().substring(0,inputLength);
+      var nameLowerCase = self.locationList()[x].name().toLowerCase();
 
-      if(inputLowerCase !== nameLowerCase) {
+      if(!(nameLowerCase.indexOf(inputLowerCase)> -1)) {
         markerArr[x].setVisible(false);
         self.locationList()[x].visibleBool(false);
         closeInfo(markerArr[x]);
@@ -185,14 +185,26 @@ var ViewModel = function ViewModel() {
 
             self.images.push( {url: url} );
         });
-
-      }).error(function() {
+      }).done(function() {
+        // if a undefined was added to url remove all imgs and
+        // display error message
+        if(self.images()[0].url === undefined) {
+          self.errMessage('Flickr pictures failed to load :-(');
+          self.images.removeAll();
+        }
+      }).fail(function() {
         self.errMessage('Flickr pictures failed to load :-(');
+        self.images.removeAll();
     });
   }
 
   // closure function to add images to images url
+  // if one item from data is undefined it will return a undefined value
   function addImagestoUrl(farmId, serverId, photoId, secret) {
+    if(farmId === undefined || serverId === undefined || photoId === undefined || secret === undefined) {
+      return undefined;
+    }
+
     var string = "https://farm" + farmId +
                 ".staticflickr.com/" + serverId +
                 "/" + photoId + "_" +
@@ -204,7 +216,6 @@ var ViewModel = function ViewModel() {
   //         Map              //
   //////////////////////////////
   var map,
-      //locationLength = locations.length,
       markerArr = [];
 
   function initMap() {
@@ -248,24 +259,26 @@ var ViewModel = function ViewModel() {
     map.mapTypes.set(customMapTypeId, customMapType);
     map.setMapTypeId(customMapTypeId);
 
+    // standanrd infoWindow for all markers will be changed
+    // by addListenerMarker function
+    var infoWindow = new google.maps.InfoWindow({
+      content: '',
+      maxWidth: 200
+    });
 
     for(var x = 0; x < locationLength; x++) {
       var myLatLng = {lat: locations[x].lat, lng: locations[x].log},
-          contentString = getInfoWindowContentString(x),
-          infoWindow = new google.maps.InfoWindow({
-            content: contentString,
-            maxWidth: 200
-          });
+          contentString = getInfoWindowContentString(x);
 
       var marker = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-        title: locations[x].name,
-        animation: google.maps.Animation.DROP,
-        icon: image
+          position: myLatLng,
+          map: map,
+          title: locations[x].name,
+          animation: google.maps.Animation.DROP,
+          icon: image
       });
 
-      addListenerMarker(marker, map, infoWindow, locations[x]);
+      addListenerMarker(marker, map, infoWindow, locations[x], contentString);
       addListenerCloseMarker(marker, map, infoWindow);
       addListenerStopMarkerAnimation(marker);
 
@@ -273,20 +286,26 @@ var ViewModel = function ViewModel() {
     }
   }
 
-  initMap();
+  // function on vm that can call initMap from outside ViewModel
+  // needed for google maps api as a callback function
+  self.startMap = function(){
+    initMap();
+  };
 
   // closure function for adding infoWindow content to makers
   // Also adding a animation on click, closeList is triggered and loading pictures from flickr Api
-  function addListenerMarker(marker, map, infoWindow, item) {
+  // And set infoWindow for marker
+  function addListenerMarker(marker, map, infoWindow, item, contentString) {
     marker.addListener('click', function() {
       self.closeListEvent();
       clearAllMarkers();
+      infoWindow.setContent(contentString);
       flickerLoad(item);
       infoWindow.open(map, marker);
       marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout(function() {
         marker.setAnimation(null);
-      }, 1500);
+      }, 700);
     });
   }
 
@@ -361,11 +380,18 @@ var ViewModel = function ViewModel() {
     if(!(list.style.transform === 'translateX(100%)')) {
         $('#closeList').trigger('click');
     }
-  }
+  };
 
 };
 
-ko.applyBindings(new ViewModel());
+var vm = new ViewModel();
+
+// callback function for google maps api
+function callMap(){
+  vm.startMap();
+}
+
+ko.applyBindings(vm);
 
 // flickr
 // ----------

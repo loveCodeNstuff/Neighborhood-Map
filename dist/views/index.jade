@@ -7,13 +7,14 @@ block body
       | X
     #list
         br
-        center
-          input(type='text' data-bind='{event: {keyup: filter}, textInput: input}' placeholder='Filter')
+        input(type='text' data-bind='{event: {keyup: filter}, textInput: input}' placeholder='Filter')
         ul(data-bind='foreach: locationList')
           li(data-bind='text: name, visible: visibleBool, click: $parent.showInfo.bind($data,name)')
         #images(data-bind='foreach: images')
-          img.pic(data-bind='attr: {src: url}' alt='flickr image of location')
-        span(data-bind='text: errMessage')
+          img.pic(data-bind='attr: {src: url}' src='#' alt='flickr image of location')
+        #apiError.margin
+          span Powered by Flickr & Google Maps
+          p.error(data-bind='text: errMessage')
   #apis
     img(src='img/flikr.png' alt='flickr icon') 
   
