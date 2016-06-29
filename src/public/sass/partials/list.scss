@@ -10,6 +10,8 @@
   width: 284px;
   line-height: 22px;
   transition: 1s all ease;
+  max-height: 95%;
+  overflow: scroll;
 
   ul{
     list-style-type: none;

@@ -6,13 +6,13 @@
   height: 100vh;
 }
 
-#pic{
+.pic{
   width:71px;
   height:70px;
   transition: 1s all ease;
 }
 
-#pic:hover{
+.pic:hover{
   transform: scale(2);
 }
 
